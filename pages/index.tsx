@@ -1,6 +1,9 @@
+// import type { Message } from 'discord.js'
+// import { Client } from 'discord.js'
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import QrReader from '../components/QrReader'
+// import { TOKEN } from '../components/token'
 
 const Home: NextPage = () => {
   // 読み込んだ QR コードのテキスト情報を格納
