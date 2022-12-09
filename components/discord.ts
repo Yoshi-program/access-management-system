@@ -1,4 +1,4 @@
-import type { Message } from 'discord.js'
+import type { Message, TextChannel } from 'discord.js'
 import { Client } from 'discord.js'
 import { TOKEN } from './token'
 
@@ -9,6 +9,10 @@ const client = new Client({
 client.once('ready', () => {
   console.log('Ready!')
   console.log(client.user?.tag)
+})
+client.on('ready', async () => {
+  const channel = client.channels.cache.get('channelid') as TextChannel
+  channel.send('what you want to send to that channel')
 })
 
 client.on('messageCreate', async (message: Message) => {
