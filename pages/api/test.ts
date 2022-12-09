@@ -1,4 +1,4 @@
-import type { GuildMember, Message, TextChannel } from 'discord.js'
+import type { GuildMember, TextChannel } from 'discord.js'
 import { Client } from 'discord.js'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { CHANNEL_ID, TOKEN } from '../../components/token'
@@ -16,8 +16,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   })
 
   client.on('ready', async () => {
-    // const channel = (await client.channels.cache.get(CHANNEL_ID)) as TextChannel
-    // channel.send('what you want to send to that channel')
+    if (req.body.qrcode != '') {
+      const channel = (await client.channels.cache.get(CHANNEL_ID)) as TextChannel
+      channel.send('in')
+    }
   })
 
   client.on('guildMemberAdd', (member: GuildMember) => {
@@ -25,14 +27,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     TargetChannel.send('Test Log!')
   })
 
-  client.on('messageCreate', async (message: Message) => {
-    if (message.author.bot) return
-    // if (message.content.startsWith('!ping')) {
-    //   message.channel.send('Pong!')
-    // }
-    message.channel.send('in')
-  })
   client.login(TOKEN)
+
   switch (req.method) {
     case 'POST': {
       res.status(statusCode).json({ qrcode: req.body.qrcode })
