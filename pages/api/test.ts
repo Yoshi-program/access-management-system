@@ -1,7 +1,9 @@
 import type { GuildMember, TextChannel } from 'discord.js'
 import { Client } from 'discord.js'
+import dotenv from 'dotenv'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { CHANNEL_ID, TOKEN } from '../../components/token'
+
+dotenv.config()
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const statusCode = 200
@@ -17,17 +19,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   client.on('ready', async () => {
     if (req.body.qrcode != '') {
-      const channel = (await client.channels.cache.get(CHANNEL_ID)) as TextChannel
-      channel.send('in')
+      if (process.env.CHANNEL_ID) {
+        const channel = (await client.channels.cache.get(process.env.CHANNEL_ID)) as TextChannel
+        channel.send('in')
+      }
     }
   })
 
   client.on('guildMemberAdd', (member: GuildMember) => {
-    const TargetChannel = member.guild.channels.cache.get(CHANNEL_ID) as TextChannel
-    TargetChannel.send('Test Log!')
+    if (process.env.CHANNEL_ID) {
+      const TargetChannel = member.guild.channels.cache.get(process.env.CHANNEL_ID) as TextChannel
+      TargetChannel.send('Test Log!')
+    }
   })
 
-  client.login(TOKEN)
+  client.login(process.env.TOKEN)
 
   switch (req.method) {
     case 'POST': {
