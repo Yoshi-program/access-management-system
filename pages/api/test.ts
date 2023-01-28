@@ -7,7 +7,6 @@ dotenv.config()
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const statusCode = 200
-  console.log(req.body)
   const client = new Client({
     intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
   })
@@ -27,10 +26,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   })
 
   client.on('guildMemberAdd', (member: GuildMember) => {
-    if (process.env.CHANNEL_ID) {
-      const TargetChannel = member.guild.channels.cache.get(process.env.CHANNEL_ID) as TextChannel
-      TargetChannel.send('Test Log!')
-    }
+    // memberのIDを取得
+    // QRコードの作成
+    // 個人QRコードが載っているサイトへのURLを個人DMに送信
+    // PWAの説明nのためのサイトのURLを個人DMに送信
   })
 
   client.login(process.env.TOKEN)
