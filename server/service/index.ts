@@ -1,9 +1,12 @@
 import fastify from 'fastify'
+import type IBodystring from '../types/access'
+import checkAccess from './access'
 
 const server = fastify()
 
-server.get('/ping', async (request, reply) => {
-  return 'pong\n'
+server.get<{ Body: IBodystring }>('/access', async (req, reply) => {
+  checkAccess(req.body)
+  return 'access!!\n'
 })
 
 server.listen({ port: 8080 }, (err, address) => {
