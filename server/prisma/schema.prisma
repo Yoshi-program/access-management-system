@@ -9,3 +9,28 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id            Int       @id @default(autoincrement())
+  name          String?
+  userId        String?   @unique
+  studentId     String?   @unique
+  discordId     String?   @unique
+  token         String?   @unique
+  floor         String?   
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  post          Post?
+
+  @@map(name: "users")
+}
+
+model Post {
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now()) @map(name: "post_created_at")
+  floorId       Int       
+  user          User?     @relation(fields: [userId], references: [userId])
+  userId        String?   @unique
+
+  @@map(name: "post")
+}
