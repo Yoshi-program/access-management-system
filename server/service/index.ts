@@ -1,6 +1,7 @@
 import fastify from 'fastify'
 import type IBodystring from '../types/access'
 import checkAccess from './access'
+// import handler from './discord'
 
 const server = fastify()
 
