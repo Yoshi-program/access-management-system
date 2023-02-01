@@ -1,33 +1,29 @@
-// import type { Message } from 'discord.js'
-// import { Client } from 'discord.js'
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import QrReader from '../components/QrReader'
-// import { TOKEN } from '../components/token'
+import qrcode from 'qrcode'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
-  // 読み込んだ QR コードのテキスト情報を格納
-  const [result, setResult] = useState<string>('')
+  const [tmp, setTmp] = useState<string>('')
+
+  const currentVersion = '1.0.0'
+  const currentAppId = '1'
+  const router = useRouter()
+  const token = router.query.token
+
+  const qrText: string = JSON.stringify({
+    version: currentVersion,
+    appId: currentAppId,
+    token: token,
+  })
 
   useEffect(() => {
-    const postData = async () => {
-      await fetch('/api/test', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ qrcode: result }),
-      })
-    }
-    postData()
-  }, [result])
+    qrcode.toDataURL(qrText, function (err, url) {
+      setTmp(url)
+    })
+  }, [qrText])
 
-  return (
-    <div>
-      <QrReader setResult={setResult} onRequestClose={() => null} />
-      <p>{result}</p>
-    </div>
-  )
+  return <img src={tmp} />
 }
 
 export default Home
