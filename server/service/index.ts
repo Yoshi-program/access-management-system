@@ -47,9 +47,11 @@ client.once('ready', () => {
 
 client.on('messageCreate', async (message: Message) => {
   if (message.author.bot) return
+  console.log(message.author)
   if (message.content.includes('name')) {
     const content: registerContent = JSON.parse(message.content)
     content.discordId = message.author.id
+    content.name = message.author.username + message.author.discriminator
     await register(content).then((token) => {
       console.log('登録できた')
       const user = client.users.cache.get(`${message.author.id}`)
@@ -60,7 +62,7 @@ client.on('messageCreate', async (message: Message) => {
     })
   }
 })
-// '{"name": "Yoshi", "studentId": "111112", "floor": "24"}'
+// '{"studentId": "111112", "floor": "24"}'
 
 client.login(process.env.DiscordBotTOKEN)
 
