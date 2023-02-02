@@ -16,10 +16,10 @@ const main = async (token: string) => {
         intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
       })
 
-      client.once('ready', () => {
-        console.log('Ready Access!')
-        console.log(client.user?.tag)
-      })
+      // client.once('ready', () => {
+      //   console.log('Ready Access!')
+      //   console.log(client.user?.tag)
+      // })
 
       client.on('ready', async () => {
         if (process.env.CHANNEL_ID) {
