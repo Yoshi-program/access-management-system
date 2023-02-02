@@ -1,11 +1,11 @@
 import type { GuildMember, TextChannel, Message } from 'discord.js'
 import { Client } from 'discord.js'
 import dotenv from 'dotenv'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 
 dotenv.config()
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: FastifyRequest, reply: FastifyReply) => {
   const statusCode = 200
   const client = new Client({
     intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
@@ -23,15 +23,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   })
 
-  client.login(process.env.TOKEN)
+  client.login(process.env.DiscordBotTOKEN)
 
   switch (req.method) {
     case 'POST': {
-      res.status(statusCode).json({ qrcode: req.body.qrcode })
+      reply.status(statusCode).send({})
+      // reply.status(statusCode).json({ qrcode: req.body.qrcode })
       break
     }
     default: {
-      res.status(statusCode).json({ name: 'John Doe' })
+      // res.status(statusCode).json({ name: 'John Doe' })
       break
     }
   }
