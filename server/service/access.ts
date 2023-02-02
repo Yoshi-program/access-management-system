@@ -1,20 +1,48 @@
 import type IBodystring from '../types/access'
 import { PrismaClient } from '@prisma/client'
+import { Client } from 'discord.js'
+import type { TextChannel } from 'discord.js'
 
 const prisma = new PrismaClient()
 
 const currentVersion = '1.0.0'
 const currentAppId = '1'
 
-const main = async () => {
+const main = async (token: string) => {
   const users = await prisma.user.findMany()
-  console.log(users)
+  users.map(async (user) => {
+    if (user.token === token) {
+      const client = new Client({
+        intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
+      })
+
+      client.once('ready', () => {
+        console.log('Ready Access!')
+        console.log(client.user?.tag)
+      })
+
+      client.on('ready', async () => {
+        if (process.env.CHANNEL_ID) {
+          const channel = (await client.channels.cache.get(process.env.CHANNEL_ID)) as TextChannel
+          channel.send(`${user.name} in`)
+        }
+      })
+
+      client.login(process.env.DiscordBotTOKEN)
+    }
+  })
 }
 
 const checkAccess = async (body: IBodystring) => {
   const { token, version, appId } = body
   console.log('token = ', token)
-  main()
+  if (version !== currentVersion) {
+    // versionが異なるときの処理
+  }
+  if (appId !== currentAppId) {
+    // appIdが異なるときの処理
+  }
+  main(token)
     .then(async () => {
       await prisma.$disconnect()
     })
@@ -23,13 +51,6 @@ const checkAccess = async (body: IBodystring) => {
       await prisma.$disconnect()
       process.exit(1)
     })
-  if (version !== currentVersion) {
-    // versionが異なるときの処理
-  }
-  if (appId !== currentAppId) {
-    // appIdが異なるときの処理
-  }
-  // tokenをもとにDBからUserIdを取得
 }
 
 export default checkAccess
