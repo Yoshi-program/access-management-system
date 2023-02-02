@@ -47,10 +47,11 @@ client.on('messageCreate', async (message: Message) => {
   if (message.author.bot) return
   if (message.content.includes('name')) {
     const content: registerContent = JSON.parse(message.content)
+    content.discordId = message.author.id
     await register(content)
   }
 })
-// '{"name": "Yoshi", "studentId": "111111", "discordId": "1234", "floor": "24"}'
+// '{"name": "Yoshi", "studentId": "111111", "floor": "24"}'
 
 client.login(process.env.DiscordBotTOKEN)
 

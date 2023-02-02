@@ -1,7 +1,7 @@
 interface registerContent {
   name: string
   studentId: string
-  discordId: string
+  discordId?: string
   floor: string
 }
 
