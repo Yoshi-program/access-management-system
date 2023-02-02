@@ -20,17 +20,19 @@ const qrCodeText: string = JSON.stringify({
 })
 
 const register = async (content: registerContent) => {
+  const createdToken = crypto.randomUUID()
   const user = await prisma.user.create({
     data: {
       name: content.name,
       userId: crypto.randomUUID(),
       studentId: content.studentId,
       discordId: content.discordId,
-      token: crypto.randomUUID(),
+      token: createdToken,
       floor: content.floor,
     },
   })
   console.log(user)
+  return createdToken
 }
 
 const statusCode = 200
@@ -48,10 +50,17 @@ client.on('messageCreate', async (message: Message) => {
   if (message.content.includes('name')) {
     const content: registerContent = JSON.parse(message.content)
     content.discordId = message.author.id
-    await register(content)
+    await register(content).then((token) => {
+      console.log('登録できた')
+      const user = client.users.cache.get(`${message.author.id}`)
+      if (user) {
+        const sendText = `https://localhost:3000/?token=${token}` // PWAの導入に関する文章（参考URLを入れて）も加える
+        user.send(sendText)
+      }
+    })
   }
 })
-// '{"name": "Yoshi", "studentId": "111111", "floor": "24"}'
+// '{"name": "Yoshi", "studentId": "111112", "floor": "24"}'
 
 client.login(process.env.DiscordBotTOKEN)
 
