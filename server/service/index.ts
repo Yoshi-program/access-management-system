@@ -2,9 +2,16 @@ import fastify from 'fastify'
 import type { GuildMember, TextChannel, Message } from 'discord.js'
 import { Client } from 'discord.js'
 import dotenv from 'dotenv'
+import crypto from 'crypto'
 import type IBodystring from '../types/access'
-// import checkAccess from './access'
+import type registerContent from '../types/register'
+import checkAccess from './access'
 // import handler from './discord'
+import { PrismaClient } from '@prisma/client'
+
+dotenv.config()
+
+const prisma = new PrismaClient()
 
 const qrCodeText: string = JSON.stringify({
   version: '1.0.0',
@@ -12,11 +19,23 @@ const qrCodeText: string = JSON.stringify({
   token: 'snfjvkdcsifa',
 })
 
-dotenv.config()
+const register = async (content: registerContent) => {
+  const user = await prisma.user.create({
+    data: {
+      name: content.name,
+      userId: crypto.randomUUID(),
+      studentId: content.studentId,
+      discordId: content.discordId,
+      token: crypto.randomUUID(),
+      floor: content.floor,
+    },
+  })
+  console.log(user)
+}
 
 const statusCode = 200
 const client = new Client({
-  intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
+  intents: ['Guilds', 'GuildMembers', 'GuildMessages', 'MessageContent'],
 })
 
 client.once('ready', () => {
@@ -26,11 +45,12 @@ client.once('ready', () => {
 
 client.on('messageCreate', async (message: Message) => {
   if (message.author.bot) return
-  message.channel.send('Pongggg!')
-  if (message.content.startsWith('!ping')) {
-    message.channel.send('Pong!')
+  if (message.content.includes('name')) {
+    const content: registerContent = JSON.parse(message.content)
+    await register(content)
   }
 })
+// '{"name": "Yoshi", "studentId": "111111", "discordId": "1234", "floor": "24"}'
 
 client.login(process.env.DiscordBotTOKEN)
 
@@ -38,6 +58,7 @@ const server = fastify()
 
 server.post<{ Body: IBodystring }>('/access', async (req, reply) => {
   console.log('request.body: ', req.body)
+  checkAccess(req.body)
   return req.body
 })
 
