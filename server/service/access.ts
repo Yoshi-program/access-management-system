@@ -1,4 +1,4 @@
-import type IBodystring from '../types/access'
+import type { IBodystring, AccessContent } from '../types/access'
 import { PrismaClient } from '@prisma/client'
 import { Client } from 'discord.js'
 import type { TextChannel } from 'discord.js'
@@ -7,6 +7,16 @@ const prisma = new PrismaClient()
 
 const currentVersion = '1.0.0'
 const currentAppId = '1'
+
+const postAccess = async (content: AccessContent) => {
+  const access = await prisma.post.create({
+    data: {
+      floorId: content.floorId,
+      userId: content.userId,
+    },
+  })
+  console.log(access)
+}
 
 const main = async (token: string) => {
   const users = await prisma.user.findMany()
@@ -29,12 +39,16 @@ const main = async (token: string) => {
       })
 
       client.login(process.env.DiscordBotTOKEN)
+
+      // const postContent = { userId: user.userId, floorId: floor, access: access }
+      // postAccess(postContent)
     }
   })
 }
 
 const checkAccess = async (body: IBodystring) => {
   const { token, version, appId } = body
+  // const { token, version, appId, floor, access } = body
   console.log('token = ', token)
   if (version !== currentVersion) {
     // versionが異なるときの処理
