@@ -51,7 +51,7 @@ client.on('messageCreate', async (message: Message) => {
   if (message.content.includes('name')) {
     const content: registerContent = JSON.parse(message.content)
     content.discordId = message.author.id
-    content.name = message.author.username + message.author.discriminator
+    content.name = message.author.username //  + message.author.discriminator
     await register(content).then((token) => {
       console.log('登録できた')
       const user = client.users.cache.get(`${message.author.id}`)
