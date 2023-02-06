@@ -1,4 +1,4 @@
 #!/bin/bash
 corepack enable
-yarn
+yarn install
 yarn build
