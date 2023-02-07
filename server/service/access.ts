@@ -54,7 +54,7 @@ const main = async (token: string, access: string, floorId: number) => {
 const checkAccess = async (body: IBodystring) => {
   const { token, version, appId, access, floorId } = body
   // const { token, version, appId, floor, access } = body
-  console.log('token = ', token)
+  // console.log('token = ', token)
   if (version !== currentVersion) {
     // versionが異なるときの処理
   }
