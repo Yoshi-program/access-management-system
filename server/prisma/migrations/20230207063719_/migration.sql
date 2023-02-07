@@ -19,6 +19,7 @@ CREATE TABLE "post" (
     "post_created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "floorId" INTEGER NOT NULL,
     "userId" TEXT,
+    "access" TEXT NOT NULL,
 
     CONSTRAINT "post_pkey" PRIMARY KEY ("id")
 );
