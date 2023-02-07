@@ -11,14 +11,15 @@ const currentAppId = '1'
 const postAccess = async (content: AccessContent) => {
   const access = await prisma.post.create({
     data: {
-      floorId: content.floorId,
       userId: content.userId,
+      floorId: content.floorId,
+      access: content.access,
     },
   })
   console.log(access)
 }
 
-const main = async (token: string) => {
+const main = async (token: string, access: string, floorId: number) => {
   const users = await prisma.user.findMany()
   users.map(async (user) => {
     if (user.token === token) {
@@ -34,20 +35,24 @@ const main = async (token: string) => {
       client.on('ready', async () => {
         if (process.env.CHANNEL_ID) {
           const channel = (await client.channels.cache.get(process.env.CHANNEL_ID)) as TextChannel
-          channel.send(`${user.name} in`)
+          channel.send(`${user.name} ${access}`).then(() => {
+            client.destroy()
+          })
         }
       })
 
       client.login(process.env.DiscordBotTOKEN)
 
-      // const postContent = { userId: user.userId, floorId: floor, access: access }
-      // postAccess(postContent)
+      if (user.userId) {
+        const postContent = { userId: user.userId, floorId: floorId, access: access }
+        postAccess(postContent)
+      }
     }
   })
 }
 
 const checkAccess = async (body: IBodystring) => {
-  const { token, version, appId } = body
+  const { token, version, appId, access, floorId } = body
   // const { token, version, appId, floor, access } = body
   console.log('token = ', token)
   if (version !== currentVersion) {
@@ -56,7 +61,7 @@ const checkAccess = async (body: IBodystring) => {
   if (appId !== currentAppId) {
     // appIdが異なるときの処理
   }
-  main(token)
+  main(token, access, floorId)
     .then(async () => {
       await prisma.$disconnect()
     })
