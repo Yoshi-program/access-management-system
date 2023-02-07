@@ -8,16 +8,16 @@ const prisma = new PrismaClient()
 const currentVersion = '1.0.0'
 const currentAppId = '1'
 
-const postAccess = async (content: AccessContent) => {
-  const access = await prisma.post.create({
-    data: {
-      userId: content.userId,
-      floorId: content.floorId,
-      access: content.access,
-    },
-  })
-  console.log(access)
-}
+// const postAccess = async (content: AccessContent) => {
+//   const access = await prisma.post.create({
+//     data: {
+//       userId: content.userId,
+//       floorId: content.floorId,
+//       access: content.access,
+//     },
+//   })
+//   console.log(access)
+// }
 
 const main = async (token: string, access: string, floorId: number) => {
   const users = await prisma.user.findMany()
@@ -43,10 +43,10 @@ const main = async (token: string, access: string, floorId: number) => {
 
       client.login(process.env.DiscordBotTOKEN)
 
-      if (user.userId) {
-        const postContent = { userId: user.userId, floorId: floorId, access: access }
-        postAccess(postContent)
-      }
+      // if (user.userId) {
+      //   const postContent = { userId: user.userId, floorId: floorId, access: access }
+      //   postAccess(postContent)
+      // }
     }
   })
 }
