@@ -73,7 +73,6 @@ const Home: NextPage = () => {
         </OutBtn>
       </BtnArea>
     </>
-
   )
 }
 

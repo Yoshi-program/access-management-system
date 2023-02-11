@@ -27,11 +27,6 @@ const main = async (token: string, access: string, floorId: number) => {
         intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
       })
 
-      // client.once('ready', () => {
-      //   console.log('Ready Access!')
-      //   console.log(client.user?.tag)
-      // })
-
       client.on('ready', async () => {
         if (process.env.CHANNEL_ID) {
           const channel = (await client.channels.cache.get(process.env.CHANNEL_ID)) as TextChannel
@@ -53,8 +48,6 @@ const main = async (token: string, access: string, floorId: number) => {
 
 const checkAccess = async (body: IBodystring) => {
   const { token, version, appId, access, floorId } = body
-  // const { token, version, appId, floor, access } = body
-  // console.log('token = ', token)
   if (version !== currentVersion) {
     // versionが異なるときの処理
   }
