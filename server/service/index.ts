@@ -15,6 +15,9 @@ server.post<{ Body: string }>('/access', async (req, reply) => {
   return req.body
 })
 
+server.get('/ping', async (req, reply) => {
+  return 'pong\n'
+})
 // server.post<{ Body: string }>('/register', async (req, reply) => {
 //   console.log('request.body: ', req.body)
 //   const registerContent: registerContent = JSON.parse(req.body)
