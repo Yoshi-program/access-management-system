@@ -32,7 +32,7 @@ server.post<{ Body: string }>('/register', async (req, reply) => {
   return req.body
 })
 
-server.listen({ port: 8080 }, (err, address) => {
+server.listen({ port: 8081 }, (err, address) => {
   if (err) {
     console.error(err)
     process.exit(1)
