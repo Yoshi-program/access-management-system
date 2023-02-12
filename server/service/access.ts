@@ -1,9 +1,12 @@
 import type { IBodystring, AccessContent } from '../types/access'
-import { PrismaClient } from '@prisma/client'
+// import { PrismaClient } from '@prisma/client'
 import { Client } from 'discord.js'
 import type { TextChannel } from 'discord.js'
+import dotenv from 'dotenv'
 
-const prisma = new PrismaClient()
+dotenv.config()
+
+// const prisma = new PrismaClient()
 
 const currentVersion = '1.0.0'
 const currentAppId = '1'
@@ -20,30 +23,43 @@ const currentAppId = '1'
 // }
 
 const main = async (token: string, access: string, floorId: number) => {
-  const users = await prisma.user.findMany()
-  users.map(async (user) => {
-    if (user.token === token) {
-      const client = new Client({
-        intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
+  const client = new Client({
+    intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
+  })
+  client.on('ready', async () => {
+    if (process.env.CHANNEL_ID) {
+      const channel = (await client.channels.cache.get(process.env.CHANNEL_ID)) as TextChannel
+      channel.send(`${token} ${floorId} ${access}`).then(() => {
+        client.destroy()
       })
-
-      client.on('ready', async () => {
-        if (process.env.CHANNEL_ID) {
-          const channel = (await client.channels.cache.get(process.env.CHANNEL_ID)) as TextChannel
-          channel.send(`${user.name} ${access}`).then(() => {
-            client.destroy()
-          })
-        }
-      })
-
-      client.login(process.env.DiscordBotTOKEN)
-
-      // if (user.userId) {
-      //   const postContent = { userId: user.userId, floorId: floorId, access: access }
-      //   postAccess(postContent)
-      // }
     }
   })
+
+  client.login(process.env.DiscordBotTOKEN)
+  // const users = await prisma.user.findMany()
+  // users.map(async (user) => {
+  //   if (user.token === token) {
+  //     const client = new Client({
+  //       intents: ['Guilds', 'GuildMembers', 'GuildMessages'],
+  //     })
+
+  //     client.on('ready', async () => {
+  //       if (process.env.CHANNEL_ID) {
+  //         const channel = (await client.channels.cache.get(process.env.CHANNEL_ID)) as TextChannel
+  //         channel.send(`${user.name} ${access}`).then(() => {
+  //           client.destroy()
+  //         })
+  //       }
+  //     })
+
+  //     client.login(process.env.DiscordBotTOKEN)
+
+  //     // if (user.userId) {
+  //     //   const postContent = { userId: user.userId, floorId: floorId, access: access }
+  //     //   postAccess(postContent)
+  //     // }
+  //   }
+  // })
 }
 
 const checkAccess = async (body: IBodystring) => {
@@ -55,12 +71,12 @@ const checkAccess = async (body: IBodystring) => {
     // appIdが異なるときの処理
   }
   main(token, access, floorId)
-    .then(async () => {
-      await prisma.$disconnect()
-    })
+    // .then(async () => {
+    //   await prisma.$disconnect()
+    // })
     .catch(async (e) => {
       console.error(e)
-      await prisma.$disconnect()
+      // await prisma.$disconnect()
       process.exit(1)
     })
 }
