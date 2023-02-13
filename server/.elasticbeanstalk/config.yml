@@ -1,9 +1,9 @@
 branch-defaults:
-  main:
-    environment: administrate-access-dev
+  default:
+    environment: server-dev
     group_suffix: null
 global:
-  application_name: administrate-access
+  application_name: server
   branch: null
   default_ec2_keyname: aws-eb
   default_platform: Node.js 16 running on 64bit Amazon Linux 2
@@ -14,5 +14,5 @@ global:
   platform_version: null
   profile: eb-cli
   repository: null
-  sc: git
+  sc: null
   workspace_type: Application
