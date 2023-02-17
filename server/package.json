@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node service/index.ts",
+    "build": "tsc --project ./tsconfig.json",
     "start": "ts-node service/index.ts"
   },
   "keywords": [],
