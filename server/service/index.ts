@@ -6,7 +6,7 @@ import checkAccess from './access'
 
 // const prisma = new PrismaClient()
 
-const server = fastify({logger: true})
+const server = fastify({ logger: true })
 
 server.post<{ Body: string }>('/access', async (req, reply) => {
   console.log('access request.body: ', req.body)
@@ -18,13 +18,11 @@ server.post<{ Body: string }>('/access', async (req, reply) => {
 server.get('/ping', async (req, reply) => {
   return 'pong\n'
 })
+
 server.get('/', async (req, reply) => {
-  reply
-    .header("Content-Type", "text/html")
-    .send(
-      `<html><head><title>Simple Node.js webserver</title></head><body><p>Simple Node.js webserver</p></body></html>`
-    );
+  reply.send('Hello World!')
 })
+
 // server.post<{ Body: string }>('/register', async (req, reply) => {
 //   console.log('request.body: ', req.body)
 //   const registerContent: registerContent = JSON.parse(req.body)
