@@ -15,10 +15,6 @@ server.post<{ Body: string }>('/access', async (req, reply) => {
   return req.body
 })
 
-server.get('/ping', async (req, reply) => {
-  return 'pong\n'
-})
-
 server.get('/', async (req, reply) => {
   reply.send('Hello World!')
 })
