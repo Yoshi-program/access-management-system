@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import qrcode from 'qrcode'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
+import AdminRouter from '../components/Router'
 
 const QrCodeImg = styled.img<{ num: number }>`
   position: absolute;
@@ -72,6 +73,7 @@ const Home: NextPage = () => {
           OUT
         </OutBtn>
       </BtnArea>
+      <AdminRouter />
     </>
   )
 }
