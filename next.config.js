@@ -5,3 +5,11 @@ module.exports = {
   trailingSlash: true,
   eslint: { ignoreDuringBuilds: true },
 }
+
+const withPWA = require('next-pwa')({
+  dest: 'public',
+})
+
+module.exports = withPWA({
+  reactStrinctMode: true,
+})
