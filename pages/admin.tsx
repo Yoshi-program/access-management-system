@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import DisplayList from '../components/DisplayList'
 
 const Admin: NextPage = () => {
   const testPost = async () => {
@@ -33,7 +34,6 @@ const Admin: NextPage = () => {
                   return
                 }
                 controller.enqueue(value)
-                // console.log(done, value)
                 push()
               })
             }
@@ -51,6 +51,7 @@ const Admin: NextPage = () => {
       <p>admin page</p>
       <button onClick={testPost}>組織をpost</button>
       <button onClick={testGet}>組織をget</button>
+      <DisplayList />
     </>
   )
 }
