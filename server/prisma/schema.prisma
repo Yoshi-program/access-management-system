@@ -20,12 +20,13 @@ model User {
   floor         String?   
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-  post          Post[]
+  accessLog     AccessLog[]
+  userOrganization UserOrganization[]
 
   @@map(name: "users")
 }
 
-model Post {
+model AccessLog {
   id            Int       @id @default(autoincrement())
   createdAt     DateTime  @default(now()) @map(name: "post_created_at")
   floorId       Int       
@@ -33,5 +34,25 @@ model Post {
   userId        String?  
   access        String
 
-  @@map(name: "post")
+  @@map(name: "accessLog")
+}
+
+model Organization {
+  id  Int @id @default(autoincrement())
+  organizationId String @unique // UUID
+  organizationName String @unique
+  discordId String?  @unique
+  userOrganization UserOrganization[]
+
+  @@map(name: "organizations")
+}
+
+model UserOrganization {
+  id  Int @id @default(autoincrement())
+  user          User?     @relation(fields: [userId], references: [userId])
+  userId        String?
+  organization Organization? @relation(fields: [organizationId], references: [organizationId])
+  organizationId String?
+
+  @@map(name: "users_organizations")
 }

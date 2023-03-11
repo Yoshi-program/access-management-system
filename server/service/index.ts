@@ -1,12 +1,17 @@
 import fastify from 'fastify'
+import cors from '@fastify/cors'
+import prisma from '../lib/prisma'
 import type { IBodystring } from '../types/access'
 // import type registerContent from '../types/register'
 import checkAccess from './access'
+import testPost, { testGet } from './test'
 // import { PrismaClient } from '@prisma/client'
 
 // const prisma = new PrismaClient()
 
 const server = fastify({ logger: true })
+
+server.register(cors)
 
 server.post<{ Body: string }>('/access', async (req, reply) => {
   console.log('access request.body: ', req.body)
@@ -17,6 +22,25 @@ server.post<{ Body: string }>('/access', async (req, reply) => {
 
 server.get('/', async (req, reply) => {
   reply.send('Hello World!')
+})
+
+server.post('/testPost', async (req, reply) => {
+  testPost(req, reply)
+})
+
+server.get('/testGet', async (req, reply) => {
+  // testGet(req, reply)
+  try {
+    // const result = requestBodySchema.parse(req.body)
+    const organizationData = await prisma.organization.findMany()
+    console.log(organizationData)
+    reply
+      .code(200)
+      .header('Content-Type', 'application/json; charset=utf-8')
+      .send({ data: organizationData })
+  } catch (error) {
+    reply.send(error)
+  }
 })
 
 // server.post<{ Body: string }>('/register', async (req, reply) => {
