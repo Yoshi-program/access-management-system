@@ -37,10 +37,24 @@ function ContactForm() {
     })
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log(`Name: ${formData.name}, Email: ${formData.email}`)
-    // Here you can add your logic to submit the form to a server or send an email.
+    try {
+      const response = await fetch('http://localhost:8081/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      if (response.ok) {
+        console.log('Form submitted successfully!')
+      } else {
+        console.error('Form submission failed.')
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
