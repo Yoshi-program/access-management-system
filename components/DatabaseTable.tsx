@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import { Button } from '@material-ui/core'
 // import { headers } from './headers'
 
 const headers = [
@@ -29,6 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     table: {
       minWidth: 650,
+    },
+    deleteButton: {
+      margin: theme.spacing(1),
     },
   })
 )
@@ -55,6 +59,12 @@ function DatabaseTable() {
     setDatabaseRecords(databaseRecords1)
   }, [])
 
+  const handleDelete = async (id: number) => {
+    const response = await fetch(`http://localhost:8081/${id}`, { method: 'DELETE' })
+    const data = await response.json()
+    setDatabaseRecords(data)
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="Database table">
@@ -72,6 +82,16 @@ function DatabaseTable() {
               <TableCell>{record.name}</TableCell>
               <TableCell>{record.age}</TableCell>
               <TableCell>{record.email}</TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.deleteButton}
+                  onClick={() => handleDelete(record.id)}
+                >
+                  Delete
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
