@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
-import DisplayList from '../components/DisplayList'
+import DisplayList from '../components/DataDisplayTable'
+import { Contact } from '../components/FallDataForm'
 
 const Admin: NextPage = () => {
   const testPost = async () => {
@@ -52,6 +53,7 @@ const Admin: NextPage = () => {
       <button onClick={testPost}>組織をpost</button>
       <button onClick={testGet}>組織をget</button>
       <DisplayList />
+      <Contact />
     </>
   )
 }
