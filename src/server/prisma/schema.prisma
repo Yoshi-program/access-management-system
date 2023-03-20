@@ -12,12 +12,13 @@ datasource db {
 
 model User {
   id            Int       @id @default(autoincrement())
-  name          String?
-  userId        String?   @unique
+  name          String
+  userId        String    @unique
   studentId     String?   @unique
   discordId     String?   @unique
-  token         String?   @unique
+  token         String    @unique
   floor         String?   
+  allow         String?  
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   accessLog     AccessLog[]
@@ -28,7 +29,7 @@ model User {
 
 model AccessLog {
   id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now()) @map(name: "post_created_at")
+  createdAt     DateTime  @default(now()) @map(name: "accessLog_created_at")
   floorId       Int       
   user          User?     @relation(fields: [userId], references: [userId])
   userId        String?  
@@ -38,20 +39,20 @@ model AccessLog {
 }
 
 model Organization {
-  id  Int @id @default(autoincrement())
-  organizationId String @unique // UUID
-  organizationName String @unique
-  discordId String?  @unique
+  id                Int @id @default(autoincrement())
+  organizationId    String @unique // UUID
+  organizationName  String @unique
+  discordId         String?  @unique
   userOrganization UserOrganization[]
 
   @@map(name: "organizations")
 }
 
 model UserOrganization {
-  id  Int @id @default(autoincrement())
-  user          User?     @relation(fields: [userId], references: [userId])
-  userId        String?
-  organization Organization? @relation(fields: [organizationId], references: [organizationId])
+  id             Int @id @default(autoincrement())
+  user           User?     @relation(fields: [userId], references: [userId])
+  userId         String?
+  organization   Organization? @relation(fields: [organizationId], references: [organizationId])
   organizationId String?
 
   @@map(name: "users_organizations")
