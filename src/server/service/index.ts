@@ -5,6 +5,7 @@ import type { IBodystring } from '../types/access'
 // import type registerContent from '../types/register'
 import checkAccess from './access'
 import testPost, { testGet } from './test'
+import { bot } from './register'
 // import { PrismaClient } from '@prisma/client'
 
 // const prisma = new PrismaClient()
@@ -66,4 +67,5 @@ server.listen({ port: 8081 }, (err, address) => {
     process.exit(1)
   }
   console.log(`Server listening at ${address}`)
+  bot()
 })
