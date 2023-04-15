@@ -1,16 +1,28 @@
 import type { NextPage } from 'next'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import useUserRole from '../hooks/useUserRole'
 import { useRouter } from 'next/router'
+import type { SelectChangeEvent } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  TextField,
+  Typography,
+  Select,
+  MenuItem,
+  InputLabel,
+} from '@mui/material'
 
 const Admin: NextPage = () => {
   const { user, signUp, signIn, signOut } = useAuth()
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin')
   const userRoleInfo = useUserRole()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [organization, setOrganization] = useState('')
-  const [role, setRole] = useState('')
+  const [organization, setOrganization] = useState('RAISON DETRE')
 
   const router = useRouter()
 
@@ -21,6 +33,12 @@ const Admin: NextPage = () => {
     }
   }, [user, router])
 
+  const handleOrganizationChange = (
+    event: SelectChangeEvent<string> // 型変更
+  ) => {
+    setOrganization(event.target.value)
+  }
+
   // const handleSignUp = async () => {
   //   try {
   //     await signUp(email, password, organization, role)
@@ -29,25 +47,22 @@ const Admin: NextPage = () => {
   //     alert(`Error: ${error.message}`)
   //   }
   // }
-  const handleSignUp = async () => {
-    try {
-      const email = 'test4@example.com'
-      const password = 'test4password'
-      const organization = 'TestOrganization'
-      await signUp(email, password, organization)
-      console.log('User signed up successfully')
-    } catch (error) {
-      console.error('Error in handleSignUp:', error)
-    }
-  }
-
-  const handleSignIn = async () => {
-    try {
-      await signIn(email, password)
-      alert('Successfully signed in.')
-      console.log(userRoleInfo)
-    } catch (error: any) {
-      alert(`Error: ${error.message}`)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (authMode === 'signin') {
+      try {
+        await signIn(email, password)
+        console.log('Successfully signed in.')
+      } catch (error) {
+        console.error('Error in signIn:', error)
+      }
+    } else {
+      try {
+        await signUp(email, password, organization)
+        console.log('Successfully signed up.')
+      } catch (error) {
+        console.error('Error in signUp:', error)
+      }
     }
   }
 
@@ -61,64 +76,105 @@ const Admin: NextPage = () => {
   }
 
   return (
-    <div>
-      <h1>Admin Page</h1>
-      {user ? (
-        <>
-          <h2>Welcome, {user.email}!</h2>
-          {userRoleInfo && (
-            <p>
-              You are a {userRoleInfo.role} in {userRoleInfo.organization}.
-            </p>
-          )}
-          <button onClick={handleSignOut}>Sign Out</button>
-        </>
-      ) : (
-        <>
-          <h2>Sign Up</h2>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Organization"
-            value={organization}
-            onChange={(e) => setOrganization(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-          />
-          <button onClick={handleSignUp}>Sign Up</button>
-
-          <h2>Sign In</h2>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={handleSignIn}>Sign In</button>
-        </>
-      )}
-    </div>
+    <Container maxWidth="xs">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        sx={{
+          marginTop: 8,
+          gap: 2,
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+          {authMode === 'signin' ? 'サインイン' : 'サインアップ'}
+        </Typography>
+        <form onSubmit={handleSubmit} noValidate autoComplete="off">
+          <Box
+            display="flex"
+            flexDirection="column"
+            sx={{
+              gap: 2,
+              width: '100%',
+            }}
+          >
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              type="password"
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {authMode === 'signup' && (
+              <>
+                <FormControl fullWidth sx={{ mt: 2 }}>
+                  <InputLabel id="organization-label">Organization</InputLabel> {/* 追加 */}
+                  <Select
+                    labelId="organization-label"
+                    id="organization"
+                    value={organization}
+                    onChange={handleOrganizationChange}
+                    label="Organization"
+                    required
+                  >
+                    <MenuItem value="RAISON DETRE">RAISON DETRE</MenuItem>
+                    <MenuItem value="INIAD.ts">INIAD.ts</MenuItem>
+                    <MenuItem value="INIAD Developers">INIAD Developers</MenuItem>
+                  </Select>
+                </FormControl>
+              </>
+            )}
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              {authMode === 'signin' ? 'サインイン' : 'サインアップ'}
+            </Button>
+          </Box>
+        </form>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          sx={{
+            gap: 1,
+            width: '100%',
+          }}
+        >
+          <Typography variant="body2">
+            {authMode === 'signin' ? 'アカウントをお持ちでない方' : 'すでにアカウントをお持ちの方'}
+          </Typography>
+          <Button
+            color="primary"
+            onClick={() => setAuthMode(authMode === 'signin' ? 'signup' : 'signin')}
+          >
+            {authMode === 'signin' ? 'サインアップ' : 'サインイン'}
+          </Button>
+        </Box>
+        {user && (
+          <Box
+            display="flex"
+            flexDirection="column"
+            sx={{
+              gap: 2,
+              width: '100%',
+            }}
+          >
+            <Typography variant="body1">
+              Signed in as {user.email}, role: {userRoleInfo?.role}
+            </Typography>
+            <Button variant="contained" color="secondary" onClick={handleSignOut}>
+              Sign out
+            </Button>
+          </Box>
+        )}
+      </Box>
+    </Container>
   )
 }
 
