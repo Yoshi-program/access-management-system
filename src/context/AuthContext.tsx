@@ -8,12 +8,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 
 interface AuthContextValue {
   user: User | null
-  signUp: (
-    email: string,
-    password: string,
-    organization: string,
-    role?: string
-  ) => Promise<UserCredential>
+  signUp: (email: string, password: string, organization: string) => Promise<UserCredential>
   signIn: (email: string, password: string) => Promise<UserCredential>
   signOut: () => Promise<void>
 }
@@ -24,14 +19,38 @@ interface AuthProviderProps {
 
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
-  signUp: async (email, password, organization, role) => {
-    throw new Error('signUp function not implemented')
+  signUp: async (
+    email: string,
+    password: string,
+    organization: string
+  ): Promise<UserCredential> => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user
+      if (user) {
+        await setDoc(doc(db, 'users', user.uid), {
+          role: 'member',
+          organization: organization,
+          subRole: 'junior',
+        })
+      }
+      return userCredential
+    } catch (error) {
+      console.error('Error in signUp:', error)
+      throw error
+    }
   },
-  signIn: async (email, password) => {
-    throw new Error('signIn function not implemented')
+  signIn: async (email: string, password: string): Promise<UserCredential> => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      return userCredential
+    } catch (error) {
+      console.error('Error in signIn:', error)
+      throw error
+    }
   },
-  signOut: async () => {
-    throw new Error('signOut function not implemented')
+  signOut: () => {
+    return auth.signOut()
   },
 })
 
@@ -57,15 +76,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signUp = async (
     email: string,
     password: string,
-    organization: string,
-    role?: string
+    organization: string
   ): Promise<UserCredential> => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
       if (user) {
         await setDoc(doc(db, 'users', user.uid), {
-          role: role || 'member',
+          role: 'member',
           organization: organization,
           subRole: 'junior',
         })
