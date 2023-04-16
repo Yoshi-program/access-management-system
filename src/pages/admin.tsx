@@ -28,10 +28,11 @@ const Admin: NextPage = () => {
 
   useEffect(() => {
     if (user) {
+      console.log(userRoleInfo.organization)
       // ユーザーが正常にサインインしたら、遷移先ページにリダイレクトする
       // router.push('/dashboard')
     }
-  }, [user, router])
+  }, [user, router, userRoleInfo])
 
   const handleOrganizationChange = (
     event: SelectChangeEvent<string> // 型変更
@@ -39,14 +40,6 @@ const Admin: NextPage = () => {
     setOrganization(event.target.value)
   }
 
-  // const handleSignUp = async () => {
-  //   try {
-  //     await signUp(email, password, organization, role)
-  //     alert('Successfully signed up.')
-  //   } catch (error: any) {
-  //     alert(`Error: ${error.message}`)
-  //   }
-  // }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (authMode === 'signin') {
@@ -69,9 +62,9 @@ const Admin: NextPage = () => {
   const handleSignOut = async () => {
     try {
       await signOut()
-      alert('Successfully signed out.')
-    } catch (error: any) {
-      alert(`Error: ${error.message}`)
+      console.log('Successfully signed out.')
+    } catch (error) {
+      console.error('Error in signOut:', error)
     }
   }
 
@@ -179,18 +172,3 @@ const Admin: NextPage = () => {
 }
 
 export default Admin
-
-// import type { NextPage } from 'next'
-// import DisplayList from '../components/DataDisplayTable'
-// import { Contact } from '../components/FallDataForm'
-
-// const Admin: NextPage = () => {
-//   return (
-//     <>
-//       <p>admin page</p>
-//       <DisplayList />
-//       <Contact />
-//     </>
-//   )
-// }
-// export default Admin
