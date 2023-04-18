@@ -28,9 +28,9 @@ const Admin: NextPage = () => {
 
   useEffect(() => {
     if (user) {
-      console.log(userRoleInfo.organization)
+      // console.log(userRoleInfo.organization)
       // ユーザーが正常にサインインしたら、遷移先ページにリダイレクトする
-      // router.push('/dashboard')
+      router.push('/dashboard/users')
     }
   }, [user, router, userRoleInfo])
 
