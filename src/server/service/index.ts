@@ -1,14 +1,12 @@
 import fastify from 'fastify'
 import cors from '@fastify/cors'
-import prisma from '../lib/prisma'
 import type { IBodystring } from '../types/access'
-// import type registerContent from '../types/register'
 import checkAccess from './access'
 import testPost, { testGet } from './test'
 import { bot } from './register'
-// import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
-// const prisma = new PrismaClient()
+const prisma = new PrismaClient()
 
 const server = fastify({ logger: true })
 
@@ -43,23 +41,6 @@ server.get('/testGet', async (req, reply) => {
     reply.send(error)
   }
 })
-
-// server.post<{ Body: string }>('/register', async (req, reply) => {
-//   console.log('request.body: ', req.body)
-//   const registerContent: registerContent = JSON.parse(req.body)
-//   const user = await prisma.user.create({
-//     data: {
-//       name: registerContent.name,
-//       userId: registerContent.userId,
-//       studentId: registerContent.studentId,
-//       discordId: registerContent.discordId,
-//       token: registerContent.token,
-//       floor: registerContent.floor,
-//     },
-//   })
-//   console.log(user)
-//   return req.body
-// })
 
 server.listen({ port: 8081 }, (err, address) => {
   if (err) {
