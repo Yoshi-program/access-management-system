@@ -42,7 +42,8 @@ model Organization {
   id                Int @id @default(autoincrement())
   organizationId    String @unique // UUID
   organizationName  String @unique
-  discordId         String?  @unique
+  discordGuildId    String?  @unique
+  discordChannelId  String @unique
   userOrganization UserOrganization[]
 
   @@map(name: "organizations")

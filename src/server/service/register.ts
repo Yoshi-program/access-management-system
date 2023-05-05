@@ -69,7 +69,7 @@ client.on('messageCreate', async (message: Message) => {
 
         // 適切な組織にユーザーを追加
         for (const organization of organizations) {
-          if (organization.discordId === message.guildId) {
+          if (organization.discordGuildId === message.guildId) {
             await addUserToOrganization(user.userId, organization.organizationId)
             break
           }
