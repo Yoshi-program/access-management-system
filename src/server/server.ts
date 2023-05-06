@@ -1,9 +1,9 @@
 import fastify from 'fastify'
 import cors from '@fastify/cors'
 import crypto from 'crypto'
-import type { IBodystring } from '../types/access'
-import checkAccess from './access'
-import { bot } from './register'
+import type { IBodystring } from './types/access'
+import checkAccess from './service/access'
+import { bot } from './service/register'
 import { PrismaClient } from '@prisma/client'
 import type { RouteGenericInterface } from 'fastify'
 
