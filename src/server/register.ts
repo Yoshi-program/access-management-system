@@ -7,7 +7,7 @@ import {
   createUser,
   findUserByDiscordId,
   getAllOrganizations,
-} from '../controllers/userController'
+} from './controllers/userController'
 dotenv.config()
 
 const TOKEN = process.env.DiscordBotTOKEN

@@ -1,4 +1,4 @@
-import type { IBodystring } from '../types/access'
+import type { IBodystring } from './types/access'
 import { PrismaClient } from '@prisma/client'
 import { Client } from 'discord.js'
 import type { TextChannel } from 'discord.js'
