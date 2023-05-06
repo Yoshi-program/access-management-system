@@ -46,7 +46,6 @@ yarn-error.log*
 !.elasticbeanstalk/*.global.yml
 
 # PWA files
-/public
 **/public/sw.js
 **/public/workbox-*.js
 **/public/worker-*.js
