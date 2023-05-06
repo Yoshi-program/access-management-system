@@ -38,7 +38,7 @@ client.on('messageCreate', async (message: Message) => {
     const studentIdMatch = intro.match(/学籍番号：(\S+)/)
 
     if (nameMatch && studentIdMatch) {
-      const name = message.author.username
+      const name = message.author.username + message.author.tag
       const studentId = studentIdMatch[1]
       const discordId = message.author.id
       const userId = crypto.randomUUID()
