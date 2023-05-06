@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import qrcode from 'qrcode'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
-import AdminRouter from '../components/Router'
 
 const QrCodeImg = styled.img<{ num: number }>`
   position: absolute;
@@ -17,21 +16,31 @@ const QrCodeImg = styled.img<{ num: number }>`
 `
 
 const BtnArea = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
 `
 
 const InBtn = styled.button<{ num: number }>`
+  position: absolute;
+  top: 40%;
+  left: 50%;
   display: ${(props) => (props.num === 1 ? 'none' : 'inline')};
-  width: 30%;
-  margin: 10%;
-  font-size: 5em;
+  width: 50%;
+  font-size: 3em;
+  text-align: center;
+  transform: translate(-50%, -50%);
 `
 const OutBtn = styled.button<{ num: number }>`
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: ${(props) => (props.num === 1 ? 'none' : 'inline')};
-  width: 30%;
-  font-size: 5em;
+  width: 50%;
+  margin-top: 50px;
+  font-size: 3em;
+  text-align: center;
+  transform: translate(-50%, -50%);
 `
 
 const Home: NextPage = () => {
@@ -69,11 +78,11 @@ const Home: NextPage = () => {
         <InBtn onClick={() => onClick('in')} num={qrState}>
           IN
         </InBtn>
+        {/* <br /> */}
         <OutBtn onClick={() => onClick('out')} num={qrState}>
           OUT
         </OutBtn>
       </BtnArea>
-      <AdminRouter />
     </>
   )
 }

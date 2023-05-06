@@ -13,10 +13,10 @@ datasource db {
 model User {
   id            Int       @id @default(autoincrement())
   name          String
-  userId        String    @unique
+  userId        String    @unique // UUID
   studentId     String?   @unique
-  discordId     String?   @unique
-  token         String    @unique
+  discordId     String?   @unique 
+  token         String    @unique // UUID
   floor         String?   
   allow         String?  
   createdAt     DateTime  @default(now()) @map(name: "created_at")
@@ -42,7 +42,8 @@ model Organization {
   id                Int @id @default(autoincrement())
   organizationId    String @unique // UUID
   organizationName  String @unique
-  discordId         String?  @unique
+  discordGuildId    String?  @unique
+  discordChannelId  String @unique
   userOrganization UserOrganization[]
 
   @@map(name: "organizations")
@@ -55,5 +56,6 @@ model UserOrganization {
   organization   Organization? @relation(fields: [organizationId], references: [organizationId])
   organizationId String?
 
+  @@unique([userId, organizationId])
   @@map(name: "users_organizations")
 }

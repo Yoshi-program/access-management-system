@@ -5,8 +5,8 @@ phases:
     runtime-versions:
       nodejs: latest
     commands:
-      - cd src/server
       - npm install -g yarn typescript
+      - cd src/server
       - yarn install
   build:
     commands:
@@ -14,9 +14,9 @@ phases:
 
 artifacts:
   files:
-    - yarn.lock
-    - package.json
-    - 'build/**/*'
+    - 'src/server/yarn.lock'
+    - 'src/server/package.json'
+    - 'src/server/build/**/*'
     # - '.platform/**/*'
     # - '.ebextensions/**/*'
   discard-paths: no
