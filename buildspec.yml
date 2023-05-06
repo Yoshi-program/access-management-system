@@ -14,6 +14,7 @@ phases:
 
 artifacts:
   files:
+    - 'Procfile'
     - 'src/server/yarn.lock'
     - 'src/server/package.json'
     - 'src/server/build/**/*'

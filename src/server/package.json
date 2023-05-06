@@ -2,11 +2,11 @@
   "name": "test-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server/server.ts",
   "scripts": {
     "dev": "ts-node server.ts",
     "build": "tsc --project ./tsconfig.json",
-    "start": "node build/server.js"
+    "start": "node src/server/build/server.js"
   },
   "keywords": [],
   "author": "",
