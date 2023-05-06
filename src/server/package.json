@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node service/server.ts",
+    "dev": "ts-node server.ts",
     "build": "tsc --project ./tsconfig.json",
-    "start": "ts-node service/server.ts"
+    "start": "node build/server.js"
   },
   "keywords": [],
   "author": "",
